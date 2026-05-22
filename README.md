@@ -50,8 +50,8 @@ Estructura visual de los nodos implementados para el enrutamiento inteligente y 
 
 ##  Instalación Rápida
 
-1. **Clonar e Importar:** Descarga el archivo `workflow.json` de este repositorio e impórtalo en tu panel de n8n.
-2. **Credenciales:** Configura los accesos en n8n para tu Bot de Telegram, base de datos MySQL y API Key de Cohere.
+1. **Clonar e Importar:** Descarga el archivo `FLUJO2_ V3_CLASE3.json` de este repositorio e impórtalo en tu panel de n8n.
+2. **Credenciales:** Configura los accesos seguros en n8n para tu Bot de Telegram, base de datos MySQL y tu API Key de Cohere.
 3. **Base de Datos:** Estructura tu tabla local usando el esquema básico:
    ```sql
    CREATE TABLE empleados (
