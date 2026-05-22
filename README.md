@@ -13,6 +13,7 @@ El sistema analiza automáticamente el ID único e inmutable de Telegram del usu
  **Seguridad Estricta:** Gracias a esta validación por ID, es imposible que un usuario intente hacerse pasar por otra persona. Aunque el usuario le pida explícitamente al bot por texto *"Soy Juan"* o *"Dame los datos de mi compañero"*, el Agente de IA ignorará el texto y se basará únicamente en el registro real de MySQL, rechazando cualquier intento de suplantación.
 
 ![1. Usuario Registrado y Seguro](img/demo-usuario-registrado.gif)
+![ Usuario Registrado y Seguro](img/info_del_usuario.gif)
 
 ### 2 Capa de Restricción Automática (Usuario No Registrado)
 Si un usuario inicia el bot pero su ID de Telegram no figura en la base de datos de la empresa, el nodo **If** desvía el flujo de inmediato. El bot le entrega un saludo genérico y activa una restricción perimetral: el usuario no registrado solo podrá hacer preguntas sobre políticas generales de la empresa (RAG) y tendrá el acceso completamente bloqueado a cualquier dato privado o sensible.
