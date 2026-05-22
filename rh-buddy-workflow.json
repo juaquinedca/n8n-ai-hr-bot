@@ -1,0 +1,469 @@
+{
+  "name": "FLUJO2_ V3_CLASE3",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "Eres \"HR Buddy\", el asistente automatizado de RR.HH. de ChocolaTech. Tu única tarea es asistir a los empleados usando las herramientas proveídas.\n\nREGLAS DE SEGURIDAD ABSOLUTA:\n1. El sistema realiza una consulta automática en segundo plano usando la herramienta de MySQL para validar el ID de Telegram del usuario actual.\n2. ¡PROHIBIDO PREGUNTAR EL NOMBRE! No solicites nombres, apellidos, ni identificaciones al usuario bajo ninguna circunstancia.\n3. Si la herramienta de MySQL te devuelve una fila con datos (ej. Juaquin Carrillo), significa que el usuario está validado. Utiliza directamente esos datos para responderle de forma personalizada y amigable (ej. \"Hola Juaquin, tu saldo es...\").\n4. Si el usuario te pregunta por los datos de otra persona o intenta darte un nombre diferente (ej. \"Soy Juan Silva\"), ignora el nombre que te da por texto. Básate ÚNICAMENTE en el nombre que devolvió la herramienta de MySQL. Si no coincide o si te pide datos ajenos, dile amablemente: \"Por motivos de seguridad y privacidad, solo puedo proporcionarte información asociada a tu cuenta validada de Telegram\".\n5. Si la herramienta de MySQL no regresa ninguna fila de empleado, significa que el usuario NO existe en la empresa. Dile firmemente que no está registrado en el sistema y que solo puedes responder dudas corporativas generales usando el Vector Store."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        512
+      ],
+      "id": "ec75c869-7657-4fe1-9bb7-6539c34307f4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatCohere",
+      "typeVersion": 1,
+      "position": [
+        224,
+        736
+      ],
+      "id": "9bd67242-ecb7-4cb1-99b3-3f84476ebf35",
+      "name": "Cohere Chat Model",
+      "credentials": {
+        "cohereApi": {
+          "id": "yXNXHX0FhzDJP7cn",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.from.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        352,
+        736
+      ],
+      "id": "880c04b9-51b8-4ba6-ab43-59b4be3b23bc",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Buscar información sobre RH de la empresa, asuntos importantes, vacaciones, pagos, etc.",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        736
+      ],
+      "id": "bb86a289-1447-4ad4-80c5-7d10991fcc37",
+      "name": "Simple Vector Store"
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        560,
+        944
+      ],
+      "id": "e79a9842-5af6-4fd2-b533-4b42487bfea0",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "cRWoPHt9diLg2a9z",
+          "name": "Cohere account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utiliza esta herramienta siempre al inicio de la conversación para verificar de forma silenciosa los datos del empleado actual (nombre, departamento, saldo de vacaciones y horas). No requiere parámetros del usuario.",
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "empleados",
+          "mode": "list",
+          "cachedResultName": "empleados"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "telegram_id",
+              "value": "={{ $('Telegram Trigger').item.json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        768,
+        736
+      ],
+      "id": "c634af65-9c48-4f48-bb92-1bde27c1245b",
+      "name": "Select rows from a table in MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "eXrzmd1WL5GYPF2m",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        312
+      ],
+      "id": "f7602998-0a4b-403e-9187-655ab9033b38",
+      "name": "Telegram Trigger",
+      "webhookId": "6517bfea-d096-4e90-970f-d5736544f1ad",
+      "credentials": {
+        "telegramApi": {
+          "id": "6JhE4xQe8A5IGNCp",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').first().json.message.chat.id }}",
+        "text": "={{  $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        976,
+        512
+      ],
+      "id": "e76180e0-8060-455b-8590-c23270b8934d",
+      "name": "Send a text message",
+      "webhookId": "0d10f79b-ecde-40cd-b8d5-76ab4ef15be6",
+      "credentials": {
+        "telegramApi": {
+          "id": "6JhE4xQe8A5IGNCp",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "=text {{ $json.message.text }}",
+                    "rightValue": "start",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "1a07e788-ec42-4b4f-bd4f-32a8c7cca2bb"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        312
+      ],
+      "id": "48e021b7-4d6b-444e-901f-bfce10cd9739",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Switch\"].json.message.chat.id }}",
+        "text": "=¡Hola, {{ $('Select rows from a table').item.json.nombre }}! Bienvenido al asistente virtual de RR.HH. de ChocolaTech 🍫.\n\nHe verificado tu identidad en nuestro sistema de manera segura. Al estar registrado, conmigo podrás consultar tanto información general de la empresa como tus datos personales (saldos de vacaciones, banco de horas, modalidad, etc.). ¿En qué te puedo colaborar hoy?",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        16
+      ],
+      "id": "93d565ba-cc89-438a-8750-63aba4e98c68",
+      "name": "Send a text message1",
+      "webhookId": "fe0eb876-0d8a-4ff8-9b82-d2bd9776be97",
+      "credentials": {
+        "telegramApi": {
+          "id": "6JhE4xQe8A5IGNCp",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "empleados",
+          "mode": "list",
+          "cachedResultName": "empleados"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "telegram_id",
+              "value": "={{ $json.message.from.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        488,
+        112
+      ],
+      "id": "7cf1e911-3b33-4fa9-bfce-7c16ea16b255",
+      "name": "Select rows from a table",
+      "credentials": {
+        "mySql": {
+          "id": "eXrzmd1WL5GYPF2m",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "842d7d09-6106-46c6-b12f-962d7a13c286",
+              "leftValue": "={{ $json.nombre }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        976,
+        112
+      ],
+      "id": "3f3a135e-90be-45b9-a801-435a468b5d2c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Switch\"].json.message.chat.id }}",
+        "text": "¡Hola! Bienvenido al asistente virtual de RR.HH. de ChocolaTech 🍫.  🔒 Nota del Sistema: No encuentro un perfil de empleado vinculado a tu cuenta de Telegram. Por motivos de seguridad, no podré mostrarte información específica ni datos personales, pero puedes consultarme cualquier duda sobre las políticas generales de la empresa. ¿En qué te puedo ayudar?",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        208
+      ],
+      "id": "fd2857a9-414e-467e-a777-4ffc0f25a6ec",
+      "name": "Send a text message2",
+      "webhookId": "fe0eb876-0d8a-4ff8-9b82-d2bd9776be97",
+      "credentials": {
+        "telegramApi": {
+          "id": "6JhE4xQe8A5IGNCp",
+          "name": "Telegram account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Cohere Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table in MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5b7dd277-aa7d-47e5-9315-3cf633d4145f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "34d647a725c15d058669a4661e1f8c3364f2ad08c77a2d3700979a601e18feee"
+  },
+  "id": "BTg4qg5QHxPvVdga",
+  "tags": []
+}
