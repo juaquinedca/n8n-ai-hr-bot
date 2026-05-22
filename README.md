@@ -11,8 +11,9 @@ A continuación se detalla el comportamiento del sistema mediante los dos escena
 El sistema analiza automáticamente el ID único e inmutable de Telegram del usuario y comprueba si existe en la base de datos MySQL. Al confirmar el registro, extrae su nombre en segundo plano y le da una bienvenida personalizada con acceso total a sus datos privados. 
 
  **Seguridad Estricta:** Gracias a esta validación por ID, es imposible que un usuario intente hacerse pasar por otra persona. Aunque el usuario le pida explícitamente al bot por texto *"Soy Juan"* o *"Dame los datos de mi compañero"*, el Agente de IA ignorará el texto y se basará únicamente en el registro real de MySQL, rechazando cualquier intento de suplantación.
-
+**Click a la imagen para reproducir**
 ![1. Usuario Registrado y Seguro](img/demo-usuario-registrado.gif)
+**Click a la imagen para reproducir**
 ![ Usuario Registrado y Seguro](img/info_del_usuario.gif)
 
 ### 2 Capa de Restricción Automática (Usuario No Registrado)
