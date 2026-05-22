@@ -72,7 +72,7 @@ Estructura visual de los nodos implementados para el enrutamiento inteligente y 
 
    <details>
 
-¿Cómo probar con tu propio usuario?
+## ¿Cómo probar con tu propio usuario?
 Para interactuar con el bot y forzar la ruta de "Usuario Registrado", necesitas conocer tu ID numérico de Telegram e insertarlo en la base de datos:
 
 Abre Telegram y busca el bot oficial @userinfobot (User Info).
