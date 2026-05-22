@@ -61,10 +61,26 @@ Estructura visual de los nodos implementados para el enrutamiento inteligente y 
      saldo_vacaciones INT,
      banco_horas DECIMAL(5,2)
    );
-
+   
+   -- Poblar con 5 registros de prueba
+   INSERT INTO empleados (telegram_id, nombre, saldo_vacaciones, banco_horas) VALUES 
+     (123456789, 'Juaquin Carrillo', 15, 8.50),
+     (987654321, 'María González', 22, 0.00),
+     (555666777, 'Carlos Mendoza', 10, 4.15),
+     (444333222, 'Ana Martínez', 18, 12.00),
+     (111222333, 'Pedro Infante', 5, 2.50);
 
    <details>
-<summary><b>👁️ Haz clic aquí para desplegar las Instrucciones de la IA (System Prompt)</b></summary>
+
+¿Cómo probar con tu propio usuario?
+Para interactuar con el bot y forzar la ruta de "Usuario Registrado", necesitas conocer tu ID numérico de Telegram e insertarlo en la base de datos:
+
+Abre Telegram y busca el bot oficial @userinfobot (User Info).
+
+Presiona /start y el bot te responderá de inmediato con tu Id numérico (un número de 9 a 10 dígitos).
+
+Modifica uno de los registros del script SQL de arriba con tu ID y tu nombre. Al enviarle /start a tu bot de RR.HH., te reconocerá al instante.
+<summary><b> Instrucciones de la IA (System Prompt) (Alimenta el Vector Store interno con este prompt)</b></summary>
 
 ```text
 Eres "HR Buddy", el asistente automatizado de RR.HH. de ChocolaTech. Tu única tarea es asistir a los empleados usando las herramientas proveídas.
