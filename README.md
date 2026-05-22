@@ -4,7 +4,7 @@ Asistente corporativo automatizado en Telegram que optimiza la atención interna
 
 ---
 
-## 🎥 Demostración en Vivo
+##  Demostración en Vivo
 
 Así interactúa el empleado con **HR Buddy**. El sistema valida su identidad en segundos y responde con contexto en tiempo real:
 
@@ -12,17 +12,17 @@ Así interactúa el empleado con **HR Buddy**. El sistema valida su identidad en
 
 ---
 
-## 🎯 Características Clave
+##  Características Clave
 
-* **🔐 Validación Automática:** Reconoce al empleado por su Telegram ID (sin contraseñas).
-* **🛡️ Capa de Seguridad (IF):** Filtra de inmediato si el usuario está registrado o no antes de dar acceso.
-* **📊 Consultas en Tiempo Real:** Extrae saldos de vacaciones y banco de horas directamente desde MySQL.
-* **🧠 Base de Conocimiento:** Responde sobre normativas de la empresa usando búsqueda semántica avanzada.
-* **🚫 Anti-Suplantación:** Confía únicamente en los registros de la base de datos, ignorando nombres ingresados por texto.
+* ** Validación Automática:** Reconoce al empleado por su Telegram ID (sin contraseñas).
+* ** Capa de Seguridad (IF):** Filtra de inmediato si el usuario está registrado o no antes de dar acceso.
+* ** Consultas en Tiempo Real:** Extrae saldos de vacaciones y banco de horas directamente desde MySQL.
+* ** Base de Conocimiento:** Responde sobre normativas de la empresa usando búsqueda semántica avanzada.
+* ** Anti-Suplantación:** Confía únicamente en los registros de la base de datos, ignorando nombres ingresados por texto.
 
 ---
 
-## 🗺️ Mapa del Workflow (n8n)
+##  Mapa del Workflow (n8n)
 
 Estructura visual de los nodos implementados para el enrutamiento inteligente y el agente de IA:
 
@@ -40,7 +40,7 @@ Estructura visual de los nodos implementados para el enrutamiento inteligente y 
 
 ---
 
-## 🚀 Instalación Rápida
+##  Instalación Rápida
 
 1. **Clonar e Importar:** Descarga el archivo `workflow.json` de este repositorio e impórtalo en tu panel de n8n.
 2. **Credenciales:** Configura los accesos en n8n para tu Bot de Telegram, base de datos MySQL y API Key de Cohere.
