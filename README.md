@@ -1,4 +1,4 @@
-# 🤖 HR Buddy - Asistente Virtual de RR.HH. con IA
+# 🤖 Agente_RRHH - Asistente Virtual de RR.HH. con IA
 
 Asistente corporativo automatizado en Telegram que optimiza la atención interna. Valida la identidad del empleado con **MySQL** y resuelve dudas complejas sobre políticas de la empresa usando **Inteligencia Artificial (Cohere + LangChain)** mediante arquitectura RAG.
 
