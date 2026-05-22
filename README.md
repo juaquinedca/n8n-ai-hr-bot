@@ -30,7 +30,7 @@ Estructura visual de los nodos implementados para el enrutamiento inteligente y 
 
 ---
 
-## 🛠️ Stack Tecnológico
+##  Stack Tecnológico
 
 * **Orquestador:** n8n (Self-Hosted)
 * **Modelo de IA:** Cohere Chat (Command-A)
