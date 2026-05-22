@@ -5,7 +5,6 @@ Asistente corporativo automatizado en Telegram que optimiza la atención interna
 ---
 
 ##  Demostración 
-
 A continuación se detalla el comportamiento del sistema mediante los dos escenarios principales de control de acceso:
 
 ### 1- Validación, Saludo Personalizado y Anti-Suplantación (Usuario Registrado)
